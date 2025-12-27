@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNAM Navigator AI - Powered by SEEEEOH</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Google Sans', 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 90vh;
+            max-height: 800px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo {
+            width: 50px;
+            height: 50px;
+            background: white;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+            animation: float 3s ease-in-out infinite;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .header-info h1 {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .header-info p {
+            font-size: 13px;
+            opacity: 0.9;
+        }
+
+        .status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.2);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #4ade80;
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .chat-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px;
+            background: #f8f9fa;
+            scroll-behavior: smooth;
+        }
+
+        .message {
+            display: flex;
+            margin-bottom: 20px;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.bot {
+            justify-content: flex-start;
+        }
+
+        .message.user {
+            justify-content: flex-end;
+        }
+
+        .message-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .bot .message-avatar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            margin-right: 12px;
+        }
+
+        .user .message-avatar {
+            background: #e5e7eb;
+            margin-left: 12px;
+            order: 2;
+        }
+
+        .message-content {
+            max-width: 70%;
+            padding: 16px 20px;
+            border-radius: 18px;
+            line-height: 1.5;
+            font-size: 15px;
+        }
+
+        .bot .message-content {
+            background: white;
+            color: #1f2937;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .user .message-content {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .quick-replies {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .quick-reply-btn {
+            background: white;
+            border: 2px solid #667eea;
+            color: #667eea;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .quick-reply-btn:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .building-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 16px;
+            border-radius: 12px;
+            margin-top: 12px;
+            border-left: 4px solid #667eea;
+        }
+
+        .building-card h3 {
+            color: #667eea;
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+
+        .building-card p {
+            color: #6b7280;
+            font-size: 14px;
+            margin: 4px 0;
+        }
+
+        .schedule-item {
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 8px 0;
+            border-left: 3px solid #10b981;
+        }
+
+        .typing-indicator {
+            display: flex;
+            gap: 6px;
+            padding: 16px 20px;
+            background: white;
+            border-radius: 18px;
+            width: fit-content;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: #667eea;
+            border-radius: 50%;
+            animation: typing 1.4s infinite;
+        }
+
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-10px); }
+        }
+
+        .input-container {
+            padding: 20px 24px;
+            background: white;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        #userInput {
+            flex: 1;
+            padding: 14px 20px;
+            border: 2px solid #e5e7eb;
+            border-radius: 24px;
+            font-size: 15px;
+            font-family: inherit;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        #userInput:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        #sendBtn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        #sendBtn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+        }
+
+        #sendBtn:active {
+            transform: scale(0.95);
+        }
+
+        .welcome-screen {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .welcome-logo {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            font-weight: bold;
+            color: white;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .welcome-screen h2 {
+            color: #1f2937;
+            font-size: 28px;
+            margin-bottom: 12px;
+        }
+
+        .welcome-screen p {
+            color: #6b7280;
+            font-size: 16px;
+            margin-bottom: 32px;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-top: 32px;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .feature-card:hover {
+            border-color: #667eea;
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.2);
+        }
+
+        .feature-card .icon {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+
+        .feature-card h3 {
+            color: #1f2937;
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+
+        .feature-card p {
+            color: #6b7280;
+            font-size: 13px;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 16px;
+            background: #f8f9fa;
+            border-top: 1px solid #e5e7eb;
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        .footer-logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .footer-logo-text {
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 16px;
+        }
+
+        .powered-by {
+            margin-top: 12px;
+            padding: 12px;
+            background: white;
+            border-radius: 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .seeeeoh-badge {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 14px;
+            letter-spacing: 1px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                height: 100vh;
+                max-height: 100vh;
+                border-radius: 0;
+            }
+
+            .header-info h1 {
+                font-size: 18px;
+            }
+
+            .message-content {
+                max-width: 85%;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .status {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-content">
+                <div class="logo-container">
+                    <div class="logo">SEEEEOH</div>
+                </div>
+                <div class="header-info">
+                    <h1>UNAM Navigator AI</h1>
+                    <p>Powered by SEEEEOH • AI Campus Assistant</p>
+                </div>
+            </div>
+            <div class="status">
+                <div class="status-dot"></div>
+                <span>Online</span>
+            </div>
+        </div>
+
+        <div class="chat-container" id="chatContainer">
+            <div class="welcome-screen" id="welcomeScreen">
+                <div class="welcome-logo">SEEEEOH</div>
+                <h2>👋 Welcome to UNAM Navigator!</h2>
+                <p>Your AI-powered campus assistant for the University of Namibia</p>
+                
+                <div class="feature-grid">
+                    <div class="feature-card" onclick="startChat('Find Building')">
+                        <div class="icon">🏛️</div>
+                        <h3>Find Buildings</h3>
+                        <p>Locate any building or department on campus</p>
+                    </div>
+                    <div class="feature-card" onclick="startChat('My Schedule')">
+                        <div class="icon">📅</div>
+                        <h3>My Schedule</h3>
+                        <p>Manage your class schedule and timetable</p>
+                    </div>
+                    <div class="feature-card" onclick="startChat('Campus Map')">
+                        <div class="icon">🗺️</div>
+                        <h3>Campus Map</h3>
+                        <p>Interactive map with directions</p>
+                    </div>
+                    <div class="feature-card" onclick="startChat('Get Started')">
+                        <div class="icon">🚀</div>
+                        <h3>Get Started</h3>
+                        <p>Set up your student profile</p>
+                    </div>
+                </div>
+
+                <div class="powered-by">
+                    <span style="color: #6b7280;">Proudly built by</span>
+                    <span class="seeeeoh-badge">SEEEEOH</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="input-container">
+            <input 
+                type="text" 
+                id="userInput" 
+                placeholder="Ask me anything about UNAM campus..."
+                autocomplete="off"
+            >
+            <button id="sendBtn" onclick="sendMessage()">➤</button>
+        </div>
+
+        <div class="footer">
+            <div class="footer-logo">
+                <span>© 2025</span>
+                <span class="footer-logo-text">SEEEEOH</span>
+                <span>• AI Solutions for Namibia</span>
+            </div>
+            <div style="margin-top: 8px;">
+                <a href="https://seeeeoh.netlify.app" target="_blank" style="color: #667eea; text-decoration: none; font-weight: 500;">
+                    Learn More About SEEEEOH
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // [SAME JAVASCRIPT CODE FROM PREVIOUS VERSION - PASTE HERE]
+        // Student profile storage
+        let studentProfile = {
+            name: '',
+            studentNumber: '',
+            program: '',
+            year: '',
+            campus: '',
+            schedule: []
+        };
+
+        // UNAM Buildings Database
+        const buildings = {
+            'main building': {
+                name: 'Main Building',
+                code: 'MB',
+                location: 'Central Campus',
+                departments: ['Administration', 'Registrar', 'Finance'],
+                description: 'The main administrative building housing student services',
+                directions: 'Enter through the main gate, it\'s the first large building on your right',
+                openingHours: 'Mon-Fri: 8:00 AM - 5:00 PM'
+            },
+            'library': {
+                name: 'University Library',
+                code: 'LIB',
+                location: 'Central Campus',
+                departments: ['Main Library', 'Study Areas', 'Computer Lab'],
+                description: 'Three-floor library with extensive collections and study spaces',
+                directions: 'Behind the Main Building, follow the paved walkway',
+                openingHours: 'Mon-Fri: 7:30 AM - 10:00 PM, Sat-Sun: 9:00 AM - 6:00 PM'
+            },
+            'science block': {
+                name: 'Science Block',
+                code: 'SB',
+                location: 'North Campus',
+                departments: ['Physics', 'Chemistry', 'Biology', 'Mathematics'],
+                description: 'Modern facilities for all science departments with laboratories',
+                directions: 'North of Main Building, past the cafeteria, look for the blue building',
+                openingHours: 'Mon-Fri: 7:00 AM - 6:00 PM'
+            },
+            'engineering block': {
+                name: 'Engineering Block',
+                code: 'EB',
+                location: 'East Campus',
+                departments: ['Civil Engineering', 'Electrical Engineering', 'Mechanical Engineering'],
+                description: 'Specialized laboratories and workshops for engineering students',
+                directions: 'East side of campus, near the sports complex',
+                openingHours: 'Mon-Fri: 7:00 AM - 8:00 PM'
+            },
+            'computer science': {
+                name: 'Computer Science Building',
+                code: 'CSB',
+                location: 'Central Campus',
+                departments: ['Computer Science', 'Information Technology', 'Network Security'],
+                description: 'State-of-the-art computer labs and lecture halls',
+                directions: 'Next to the Library, modern glass building',
+                openingHours: 'Mon-Fri: 7:00 AM - 9:00 PM, Sat: 9:00 AM - 5:00 PM'
+            },
+            'business school': {
+                name: 'School of Business',
+                code: 'SoB',
+                location: 'West Campus',
+                departments: ['Accounting', 'Finance', 'Marketing', 'Management'],
+                description: 'Modern lecture theaters and case study rooms',
+                directions: 'West wing, near the parking lot, red brick building',
+                openingHours: 'Mon-Fri: 7:30 AM - 6:00 PM'
+            },
+            'cafeteria': {
+                name: 'Student Cafeteria',
+                code: 'CAF',
+                location: 'Central Campus',
+                departments: ['Main Dining', 'Coffee Shop', 'Food Court'],
+                description: 'Multiple food vendors and seating areas',
+                directions: 'Center of campus, between Science Block and Main Building',
+                openingHours: 'Mon-Fri: 7:00 AM - 7:00 PM, Sat: 9:00 AM - 3:00 PM'
+            },
+            'student center': {
+                name: 'Student Center',
+                code: 'SC',
+                location: 'Central Campus',
+                departments: ['Student Affairs', 'Clubs & Societies', 'Recreation'],
+                description: 'Hub for student activities and support services',
+                directions: 'Behind the cafeteria, two-story yellow building',
+                openingHours: 'Mon-Fri: 8:00 AM - 6:00 PM'
+            },
+            'medical center': {
+                name: 'Campus Medical Center',
+                code: 'MC',
+                location: 'South Campus',
+                departments: ['General Practice', 'Nursing', 'Pharmacy'],
+                description: 'On-campus healthcare for students and staff',
+                directions: 'South entrance, near Gate 2, white building with red cross',
+                openingHours: 'Mon-Fri: 8:00 AM - 4:00 PM'
+            },
+            'sports complex': {
+                name: 'Sports Complex',
+                code: 'SPORT',
+                location: 'East Campus',
+                departments: ['Gym', 'Sports Fields', 'Indoor Courts'],
+                description: 'Full sports facilities including gym, courts, and fields',
+                directions: 'Far east of campus, large open area with stadium',
+                openingHours: 'Mon-Fri: 6:00 AM - 9:00 PM, Weekends: 8:00 AM - 6:00 PM'
+            }
+        };
+
+        loadProfile();
+
+        function loadProfile() {
+            const saved = localStorage.getItem('unamStudentProfile');
+            if (saved) {
+                studentProfile = JSON.parse(saved);
+            }
+        }
+
+        function saveProfile() {
+            localStorage.setItem('unamStudentProfile', JSON.stringify(studentProfile));
+        }
+
+        function startChat(action) {
+            document.getElementById('welcomeScreen').style.display = 'none';
+            
+            setTimeout(() => {
+                if (action === 'Get Started') {
+                    if (!studentProfile.name) {
+                        addBotMessage("Hi! I'm your UNAM Navigator AI assistant. Let's get you set up! What's your name?");
+                        window.conversationState = 'getting_name';
+                    } else {
+                        addBotMessage(`Welcome back, ${studentProfile.name}! How can I help you today?`, [
+                            'Find a building',
+                            'My schedule',
+                            'Campus map',
+                            'Update my info'
+                        ]);
+                    }
+                } else if (action === 'Find Building') {
+                    addBotMessage("Which building are you looking for? You can search by name or ask me about departments.", [
+                        'Library',
+                        'Computer Science',
+                        'Cafeteria',
+                        'Show all buildings'
+                    ]);
+                } else if (action === 'My Schedule') {
+                    if (studentProfile.schedule.length > 0) {
+                        showSchedule();
+                    } else {
+                        addBotMessage("I don't have your schedule yet. Would you like to add your classes?", [
+                            'Yes, add schedule',
+                            'Not now'
+                        ]);
+                    }
+                } else if (action === 'Campus Map') {
+                    showCampusMap();
+                }
+            }, 500);
+        }
+
+        let conversationState = null;
+        let tempScheduleEntry = {};
+
+        function addBotMessage(text, quickReplies = null) {
+            const chatContainer = document.getElementById('chatContainer');
+            
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'message bot';
+            typingDiv.innerHTML = `
+                <div class="message-avatar">🤖</div>
+                <div class="typing-indicator">
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                </div>
+            `;
+            chatContainer.appendChild(typingDiv);
+            scrollToBottom();
+
+            setTimeout(() => {
+                typingDiv.remove();
+                
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'message bot';
+                messageDiv.innerHTML = `
+                    <div class="message-avatar">🤖</div>
+                    <div class="message-content">
+                        ${text}
+                        ${quickReplies ? `
+                            <div class="quick-replies">
+                                ${quickReplies.map(reply => 
+                                    `<button class="quick-reply-btn" onclick="handleQuickReply('${reply}')">${reply}</button>`
+                                ).join('')}
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+                chatContainer.appendChild(messageDiv);
+                scrollToBottom();
+            }, 1000);
+        }
+
+        function addUserMessage(text) {
+            const chatContainer = document.getElementById('chatContainer');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message user';
+            messageDiv.innerHTML = `
+                <div class="message-content">${text}</div>
+                <div class="message-avatar">👤</div>
+            `;
+            chatContainer.appendChild(messageDiv);
+            scrollToBottom();
+        }
+
+        function handleQuickReply(reply) {
+            addUserMessage(reply);
+            processMessage(reply);
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('userInput');
+            const message = input.value.trim();
+            
+            if (message) {
+                addUserMessage(message);
+                input.value = '';
+                processMessage(message);
+            }
+        }
+
+        function processMessage(message) {
+            const lowerMessage = message.toLowerCase();
+
+            if (conversationState === 'getting_name') {
+                studentProfile.name = message;
+                saveProfile();
+                addBotMessage(`Nice to meet you, ${message}! What's your student number?`);
+                conversationState = 'getting_student_number';
+                return;
+            }
+
+            if (conversationState === 'getting_student_number') {
+                studentProfile.studentNumber = message;
+                saveProfile();
+                addBotMessage(`Got it! What program are you studying?`, [
+                    'Computer Science',
+                    'Engineering',
+                    'Business',
+                    'Science',
+                    'Other'
+                ]);
+                conversationState = 'getting_program';
+                return;
+            }
+
+            if (conversationState === 'getting_program') {
+                studentProfile.program = message;
+                saveProfile();
+                addBotMessage(`Great! Which year are you in?`, [
+                    'First Year',
+                    'Second Year',
+                    'Third Year',
+                    'Fourth Year',
+                    'Honours'
+                ]);
+                conversationState = 'getting_year';
+                return;
+            }
+
+            if (conversationState === 'getting_year') {
+                studentProfile.year = message;
+                saveProfile();
+                addBotMessage(`Perfect, ${studentProfile.name}! Your profile is all set up. How can I help you today?`, [
+                    'Find a building',
+                    'Add my schedule',
+                    'Show campus map',
+                    'View my info'
+                ]);
+                conversationState = null;
+                return;
+            }
+
+            if (conversationState === 'getting_course_name') {
+                tempScheduleEntry.course = message;
+                addBotMessage(`What day is this class?`, [
+                    'Monday',
+                    'Tuesday',
+                    'Wednesday',
+                    'Thursday',
+                    'Friday'
+                ]);
+                conversationState = 'getting_day';
+                return;
+            }
+
+            if (conversationState === 'getting_day') {
+                tempScheduleEntry.day = message;
+                addBotMessage(`What time does the class start? (e.g., 08:00 or 2:00 PM)`);
+                conversationState = 'getting_time';
+                return;
+            }
+
+            if (conversationState === 'getting_time') {
+                tempScheduleEntry.time = message;
+                addBotMessage(`Which building is this class in?`, [
+                    'Computer Science',
+                    'Science Block',
+                    'Engineering Block',
+                    'Business School',
+                    'Main Building'
+                ]);
+                conversationState = 'getting_location';
+                return;
+            }
+
+            if (conversationState === 'getting_location') {
+                tempScheduleEntry.location = message;
+                studentProfile.schedule.push({...tempScheduleEntry});
+                saveProfile();
+                addBotMessage(`✅ Class added! ${tempScheduleEntry.course} on ${tempScheduleEntry.day} at ${tempScheduleEntry.time} in ${tempScheduleEntry.location}. Would you like to add another class?`, [
+                    'Yes, add another',
+                    'No, view my schedule',
+                    'Done'
+                ]);
+                tempScheduleEntry = {};
+                conversationState = null;
+                return;
+            }
+
+            if (lowerMessage.includes('hello') || lowerMessage.includes('hi') || lowerMessage.includes('hey')) {
+                const greeting = studentProfile.name ? 
+                    `Hello ${studentProfile.name}! How can I help you navigate UNAM today?` :
+                    `Hi there! I'm your UNAM Navigator. How can I help you today?`;
+                addBotMessage(greeting, [
+                    'Find a building',
+                    'My schedule',
+                    'Campus map',
+                    'Get started'
+                ]);
+            }
+            else if (lowerMessage.includes('find') || lowerMessage.includes('where') || lowerMessage.includes('locate')) {
+                findBuilding(message);
+            }
+            else if (lowerMessage.includes('schedule') || lowerMessage.includes('timetable') || lowerMessage.includes('classes')) {
+                if (lowerMessage.includes('add')) {
+                    addBotMessage("Let's add a class to your schedule. What's the course name?");
+                    conversationState = 'getting_course_name';
+                } else {
+                    showSchedule();
+                }
+            }
+            else if (lowerMessage.includes('map')) {
+                showCampusMap();
+            }
+            else if (lowerMessage.includes('all buildings') || lowerMessage.includes('show buildings')) {
+                listAllBuildings();
+            }
+            else if (lowerMessage.includes('my info') || lowerMessage.includes('profile')) {
+                showProfile();
+            }
+            else if (lowerMessage.includes('update') && lowerMessage.includes('info')) {
+                addBotMessage("What would you like to update? Let's start fresh.");
+                conversationState = 'getting_name';
+                addBotMessage("What's your name?");
+            }
+            else {
+                findBuilding(message);
+            }
+        }
+
+        function findBuilding(query) {
+            const lowerQuery = query.toLowerCase();
+            let found = null;
+
+            for (const [key, building] of Object.entries(buildings)) {
+                if (lowerQuery.includes(key) || 
+                    lowerQuery.includes(building.name.toLowerCase()) ||
+                    lowerQuery.includes(building.code.toLowerCase()) ||
+                    building.departments.some(dept => lowerQuery.includes(dept.toLowerCase()))) {
+                    found = building;
+                    break;
+                }
+            }
+
+            if (found) {
+                const buildingInfo = `
+                    <div class="building-card">
+                        <h3>🏛️ ${found.name} (${found.code})</h3>
+                        <p><strong>📍 Location:</strong> ${found.location}</p>
+                        <p><strong>🏢 Departments:</strong> ${found.departments.join(', ')}</p>
+                        <p><strong>ℹ️ Description:</strong> ${found.description}</p>
+                        <p><strong>🚶 Directions:</strong> ${found.directions}</p>
+                        <p><strong>🕐 Hours:</strong> ${found.openingHours}</p>
+                    </div>
+                `;
+                addBotMessage(buildingInfo, [
+                    'Get directions',
+                    'Find another building',
+                    'Show all buildings'
+                ]);
+            } else {
+                addBotMessage("I couldn't find that building. Try searching for:", [
+                    'Library',
+                    'Computer Science',
+                    'Science Block',
+                    'Cafeteria',
+                    'Show all buildings'
+                ]);
+            }
+        }
+
+        function listAllBuildings() {
+            let buildingList = '<strong>📚 UNAM Campus Buildings:</strong><br><br>';
+            for (const building of Object.values(buildings)) {
+                buildingList += `<div class="building-card">
+                    <h3>${building.name} (${building.code})</h3>
+                    <p>${building.description}</p>
+                    <p><strong>Location:</strong> ${building.location}</p>
+                </div>`;
+            }
+            addBotMessage(buildingList, [
+                'Find specific building',
+                'Campus map'
+            ]);
+        }
+
+        function showSchedule() {
+            if (studentProfile.schedule.length === 0) {
+                addBotMessage("You don't have any classes in your schedule yet. Would you like to add some?", [
+                    'Yes, add class',
+                    'Not now'
+                ]);
+                return;
+            }
+
+            let scheduleHTML = `<strong>📅 Your Schedule:</strong><br><br>`;
+            const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+            
+            days.forEach(day => {
+                const dayClasses = studentProfile.schedule.filter(c => c.day === day);
+                if (dayClasses.length > 0) {
+                    scheduleHTML += `<strong>${day}:</strong><br>`;
+                    dayClasses.forEach(c => {
+                        scheduleHTML += `<div class="schedule-item">
+                            <strong>${c.course}</strong><br>
+                            🕐 ${c.time} | 📍 ${c.location}
+                        </div>`;
+                    });
+                }
+            });
+
+            addBotMessage(scheduleHTML, [
+                'Add another class',
+                'Clear schedule',
+                'Done'
+            ]);
+        }
+
+        function showCampusMap() {
+            const mapHTML = `
+                <strong>🗺️ UNAM Campus Map:</strong><br><br>
+                <div class="building-card">
+                    <h3>Interactive Campus Layout</h3>
+                    <p><strong>North Campus:</strong> Science Block, Laboratories</p>
+                    <p><strong>Central Campus:</strong> Main Building, Library, Computer Science, Student Center, Cafeteria</p>
+                    <p><strong>East Campus:</strong> Engineering Block, Sports Complex</p>
+                    <p><strong>West Campus:</strong> Business School</p>
+                    <p><strong>South Campus:</strong> Medical Center</p>
+                </div>
+            `;
+            addBotMessage(mapHTML, [
+                'Find specific building',
+                'Get directions',
+                'Main menu'
+            ]);
+        }
+
+        function showProfile() {
+            if (!studentProfile.name) {
+                addBotMessage("You haven't set up your profile yet. Would you like to do that now?", [
+                    'Yes, set up profile',
+                    'Not now'
+                ]);
+                return;
+            }
+
+            const profileHTML = `
+                <strong>👤 Your Profile:</strong><br><br>
+                <div class="building-card">
+                    <p><strong>Name:</strong> ${studentProfile.name}</p>
+                    <p><strong>Student Number:</strong> ${studentProfile.studentNumber || 'Not set'}</p>
+                    <p><strong>Program:</strong> ${studentProfile.program || 'Not set'}</p>
+                    <p><strong>Year:</strong> ${studentProfile.year || 'Not set'}</p>
+                    <p><strong>Classes Registered:</strong> ${studentProfile.schedule.length}</p>
+                </div>
+            `;
+            addBotMessage(profileHTML, [
+                'Update info',
+                'View schedule',
+                'Main menu'
+            ]);
+        }
+
+        function scrollToBottom() {
+            const container = document.getElementById('chatContainer');
+            container.scrollTop = container.scrollHeight;
+        }
+
+        document.getElementById('userInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('quick-reply-btn')) {
+                const reply = e.target.textContent;
+                
+                if (reply.includes('add schedule') || reply.includes('Add my schedule') || reply.includes('add class')) {
+                    addBotMessage("Let's add a class. What's the course name?");
+                    conversationState = 'getting_course_name';
+                }
+                else if (reply.includes('Clear schedule')) {
+                    studentProfile.schedule = [];
+                    saveProfile();
+                    addBotMessage("✅ Your schedule has been cleared.");
+                }
+                else if (reply.includes('set up profile') || reply.includes('Get started')) {
+                    addBotMessage("Let's set up your profile! What's your name?");
+                    conversationState = 'getting_name';
+                }
+            }
+        });
+    </script>
+</body>
+</html>
